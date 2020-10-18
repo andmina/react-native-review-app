@@ -11,7 +11,7 @@ export default class ListScreen extends React.Component {
   };
 
   componentDidMount() {
-    reviewApi("/restaurant")
+    reviewApi("/restaurant") // waiting for the result to display the screen
       .then(res => {
         this.setState({
           restaurants: res.result,

@@ -14,7 +14,7 @@ export const saveAuthToken = token => {
 
 // 
 export const hasAuthToken = () => {
-  return AsyncStorage.getItem(AUTH_TOKEN).then(token => {
+  return AsyncStorage.getItem(AUTH_TOKEN).then(token => { // grab our token
     console.log('token', token); // return a promise in a form of a token
     if (token) {
       return true;
@@ -24,7 +24,8 @@ export const hasAuthToken = () => {
   });
 };
 
-export const reviewApi = (path, options = {}) => {
+export const reviewApi = (path, options = {}) => { 
+  return AsyncStorage.getItem(AUTH_TOKEN).then(token => { // grab our token
   const completeOptions = {
     ...options, // copy all of our options
     headers: {
@@ -32,6 +33,9 @@ export const reviewApi = (path, options = {}) => {
       'Content-Type': 'application/json', // so it exppects us to be sending json
     },
   };
+  if (token) { // if token exists, pass authorization
+    completeOptions.headers.authorization = `Bearer ${token}`;
+  }
 
   return fetch(`${BASE_URL}/api${path}`, completeOptions).then(async res => {
     const responseJson = await res.json();
@@ -39,7 +43,7 @@ export const reviewApi = (path, options = {}) => {
     if (res.ok) {
       return responseJson;
     }
-
     throw new Error(responseJson.error);
   });
+});
 };

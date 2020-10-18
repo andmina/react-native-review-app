@@ -66,9 +66,10 @@ class RestaurantDetails extends React.Component {
     this.fetchReviews();
   }
 
+  // fetch the reviews for the restaurant
   fetchReviews = () => {
     const item = this.props.navigation.getParam("item", {});
-    reviewApi(`/reviews?restaurantId=${item._id}`)
+    reviewApi(`/reviews?restaurantId=${item._id}`) // fetch reviews for the restaurant
       .then(res => {
         this.setState({
           reviews: res.result,
@@ -83,8 +84,8 @@ class RestaurantDetails extends React.Component {
   submitReview = () => {
     const item = this.props.navigation.getParam("item", {});
 
-    reviewApi(`/reviews`, {
-      method: "POST",
+    reviewApi(`/reviews`, { 
+      method: "POST", // post to it when we submit a review
       body: JSON.stringify({
         restaurantId: item._id,
         content: this.state.newReview
