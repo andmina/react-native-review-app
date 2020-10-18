@@ -12,6 +12,18 @@ export const saveAuthToken = token => {
   return AsyncStorage.setItem(AUTH_TOKEN, token); // set item AUTH_TOKEN to be the token
 };
 
+// 
+export const hasAuthToken = () => {
+  return AsyncStorage.getItem(AUTH_TOKEN).then(token => {
+    console.log('token', token); // return a promise in a form of a token
+    if (token) {
+      return true;
+    }
+
+    return false;
+  });
+};
+
 export const reviewApi = (path, options = {}) => {
   const completeOptions = {
     ...options, // copy all of our options

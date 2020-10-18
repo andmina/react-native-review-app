@@ -6,7 +6,9 @@ import { createStackNavigator } from "react-navigation-stack";
 import List from "./screens/List";
 import RestaurantDetails from "./screens/RestaurantDetails";
 import SignIn from "./screens/SignIn";
-import CreateAccount from "./screens/CreateAccount";
+import CreateAccount from './screens/CreateAccount';
+import Initializing from './screens/Initializing';
+import { saveAuthToken } from './util/api';
 
 const defaultStackOptions = {
   headerStyle: {
@@ -20,25 +22,29 @@ const Information = createStackNavigator(
     List: {
       screen: List,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: "Restaurants",
+        headerTitle: 'Restaurants',
         headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.navigate("Auth")}>
-            <Text style={{ color: "#fff", marginRight: 10 }}>Sign Out</Text>
+          <TouchableOpacity
+            onPress={() => {
+              saveAuthToken().then(() => navigation.navigate('Auth'));
+            }}
+          >
+            <Text style={{ color: '#fff', marginRight: 10 }}>Sign Out</Text>
           </TouchableOpacity>
-        )
-      })
+        ),
+      }),
     },
     RestaurantDetails: {
       screen: RestaurantDetails,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: navigation.getParam("item", {}).name
-      })
-    }
+        headerTitle: navigation.getParam('item', {}).name,
+      }),
+    },
   },
   {
     defaultNavigationOptions: {
-      ...defaultStackOptions
-    }
+      ...defaultStackOptions,
+    },
   }
 );
 
@@ -53,18 +59,19 @@ const Auth = createStackNavigator(
     SignIn: {
       screen: SignIn,
       navigationOptions: {
-        headerTitle: "Sign In"
-      }
-    }
+        headerTitle: 'Sign In',
+      },
+    },
   },
   {
     defaultNavigationOptions: {
-      ...defaultStackOptions
-    }
+      ...defaultStackOptions,
+    },
   }
 );
 
 const App = createSwitchNavigator({
+  Initializing, // land the navigation here first
   Auth,
   Information
 });
