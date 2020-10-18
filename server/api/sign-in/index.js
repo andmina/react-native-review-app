@@ -24,7 +24,10 @@ app.post('*', (req, res) => {
       }
         // pass the user id if the password is correct 
         // keep the password secret
-      return jwt.sign({ userId: finalUser._id }, config.JWT_SECRET); // this returns a promise where we get the promise from
+        // this returns a promise where we get the promise from
+      return jwt.sign({ userId: finalUser._id }, config.JWT_SECRET, {
+        expiresIn: '1m', // toker is going to expire in 1 min
+      });
     })
     .then(token => {
       res.status(200).json({

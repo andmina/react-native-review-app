@@ -9,6 +9,7 @@ import SignIn from "./screens/SignIn";
 import CreateAccount from './screens/CreateAccount';
 import Initializing from './screens/Initializing';
 import { saveAuthToken } from './util/api';
+import { setTopLevelNavigator } from './util/NavigationService';
 
 const defaultStackOptions = {
   headerStyle: {
@@ -79,8 +80,11 @@ const App = createSwitchNavigator({
 const AppWithContainer = createAppContainer(App);
 
 export default () => (
-  <React.Fragment>
+  <>
     <StatusBar barStyle="light-content" />
-    <AppWithContainer />
-  </React.Fragment>
+    <AppWithContainer
+    // set the global navigator
+      ref={navigatorRef => setTopLevelNavigator(navigatorRef)} // so we can interact w our navigation from outside of the screens that are actually being rendered 
+    />
+  </>
 );

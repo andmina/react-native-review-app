@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native';
+import { navigate } from './NavigationService';
 
 // const BASE_URL = "http://localhost:3000";
 const BASE_URL = "http://192.168.86.44:3000";
@@ -43,6 +44,12 @@ export const reviewApi = (path, options = {}) => {
     if (res.ok) {
       return responseJson;
     }
+    // if the user is unauthorized  
+    if (res.status === 401) {
+      navigate('Auth'); // go to the sign-in screen
+      saveAuthToken();  // remove auth token 
+    }
+
     throw new Error(responseJson.error);
   });
 });
