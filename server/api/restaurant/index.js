@@ -2,7 +2,8 @@ const app = require("../../util/configureApi");
 const connectDB = require("../../util/db");
 const Restaurant = require("../../models/Restaurant");
 
-app.get("*", (req, res) => {
+// protect route by adding middleware
+app.get('*', require('../../middleware/auth'), (req, res) => { // "*, req, res is a middleware"
   connectDB()
     .then(() => {
       const { _id } = req.query;
