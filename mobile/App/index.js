@@ -6,7 +6,10 @@ import { createStackNavigator } from "react-navigation-stack";
 import List from "./screens/List";
 import RestaurantDetails from "./screens/RestaurantDetails";
 import SignIn from "./screens/SignIn";
-import CreateAccount from "./screens/CreateAccount";
+import CreateAccount from './screens/CreateAccount';
+import Initializing from './screens/Initializing';
+import { saveAuthToken } from './util/api';
+import { setTopLevelNavigator } from './util/NavigationService';
 
 const defaultStackOptions = {
   headerStyle: {
@@ -20,51 +23,56 @@ const Information = createStackNavigator(
     List: {
       screen: List,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: "Restaurants",
+        headerTitle: 'Restaurants',
         headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.navigate("Auth")}>
-            <Text style={{ color: "#fff", marginRight: 10 }}>Sign Out</Text>
+          <TouchableOpacity
+            onPress={() => {
+              saveAuthToken().then(() => navigation.navigate('Auth'));
+            }}
+          >
+            <Text style={{ color: '#fff', marginRight: 10 }}>Sign Out</Text>
           </TouchableOpacity>
-        )
-      })
+        ),
+      }),
     },
     RestaurantDetails: {
       screen: RestaurantDetails,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: navigation.getParam("item", {}).name
-      })
-    }
+        headerTitle: navigation.getParam('item', {}).name,
+      }),
+    },
   },
   {
     defaultNavigationOptions: {
-      ...defaultStackOptions
-    }
+      ...defaultStackOptions,
+    },
   }
 );
 
 const Auth = createStackNavigator(
   {
-    CreateAccount: {
-      screen: CreateAccount,
-      navigationOptions: {
-        headerTitle: "Create Account"
-      }
-    },
+    // CreateAccount: {
+    //   screen: CreateAccount,
+    //   navigationOptions: {
+    //     headerTitle: "Create Account"
+    //   }
+    // },
     SignIn: {
       screen: SignIn,
       navigationOptions: {
-        headerTitle: "Sign In"
-      }
-    }
+        headerTitle: 'Sign In',
+      },
+    },
   },
   {
     defaultNavigationOptions: {
-      ...defaultStackOptions
-    }
+      ...defaultStackOptions,
+    },
   }
 );
 
 const App = createSwitchNavigator({
+  Initializing, // land the navigation here first
   Auth,
   Information
 });
@@ -72,8 +80,11 @@ const App = createSwitchNavigator({
 const AppWithContainer = createAppContainer(App);
 
 export default () => (
-  <React.Fragment>
+  <>
     <StatusBar barStyle="light-content" />
-    <AppWithContainer />
-  </React.Fragment>
+    <AppWithContainer
+    // set the global navigator
+      ref={navigatorRef => setTopLevelNavigator(navigatorRef)} // so we can interact w our navigation from outside of the screens that are actually being rendered 
+    />
+  </>
 );

@@ -5,7 +5,7 @@ let isConnected;
 
 // Note: This should be stored in environment variables
 const DB_URL =
-  "mongodb+srv://admin:HBLDemo@cluster0-5eefd.mongodb.net/test?retryWrites=true&w=majority";
+  "mongodb+srv://andmina:NhwI042EL1qc8QRJ@cluster0.kn6iu.mongodb.net/reviewDB?retryWrites=true&w=majority";
 
 const connectToDatabase = () => {
   if (isConnected) {
